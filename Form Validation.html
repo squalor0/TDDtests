@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation</title>
+    <style>
+        /* Basic styling for the page layout */
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: sans-serif;
+            text-align: center;
+        }
+
+        /* Center the form and align it left for inputs */
+        form {
+            display: inline-block;
+            text-align: left;
+        }
+
+        /* Styling for error messages */
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+
+        /* Styling for success messages */
+        .success {
+            color: green;
+        }
+
+        /* Styling for labels and inputs */
+        label {
+            display: block;
+            margin-top: 20px; 
+            margin-bottom: 5px; 
+        }
+
+        input, select, textarea, button {
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        small.error {
+            display: block;
+            margin-top: -10px;
+            margin-bottom: 20px; 
+        }
+
+        /* Flex container for phone fields */
+        .phone-container {
+            display: flex;
+            justify-content: center; 
+            align-items: center; 
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Styling for inline labels (e.g., radio buttons and checkboxes) */
+        .inline-label {
+            display: inline-block;
+            margin: 0 10px 20px 0; 
+            vertical-align: middle;
+        }
+
+        .inline-label input[type="checkbox"],
+        .inline-label input[type="radio"] {
+            vertical-align: middle;
+            margin: 0 5px 0 0;
+        }
+
+        /* Styling for radio button groups */
+        .radio-group {
+            display: flex; 
+            gap: 10px; 
+            justify-content: center; 
+            margin-bottom: 20px;
+        }
+
+        /* Hide file input and label by default */
+        #fileLabel, #file {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>User Registration</h1>
+    <p><strong>*</strong> Required fields</p>
+    <form id="userForm">
+        <!-- First name input -->
+        <label for="firstName">First Name: *</label>
+        <input type="text" id="firstName" name="firstName" placeholder="John" required>
+        <small class="error" id="firstNameError"></small>
+
+        <!-- Surname input -->
+        <label for="surname">Surname: *</label>
+        <input type="text" id="surname" name="surname" placeholder="Doe" required>
+        <small class="error" id="surnameError"></small>
+
+        <!-- Email input -->
+        <label for="email">Email: *</label>
+        <input type="email" id="email" name="email" placeholder="example@domain.com" required>
+        <small class="error" id="emailError"></small>
+
+        <!-- Date of Birth input -->
+        <label for="dobDay">Date of Birth: *</label>
+        <div style="display: flex; gap: 5px; justify-content: center;">
+            <input type="number" id="dobDay" name="dobDay" placeholder="Day" value="15" min="1" max="31" style="width: 50px;" required>
+            <input type="number" id="dobMonth" name="dobMonth" placeholder="Month" value="6" min="1" max="12" style="width: 60px;" required>
+            <input type="number" id="dobYear" name="dobYear" placeholder="Year" value="1990" min="1900" max="2023" style="width: 80px;" required>
+        </div>
+        <small class="error" id="dobError"></small>
+
+        <!-- Age input -->
+        <label for="age">Age: *</label>
+        <input type="number" id="age" name="age" placeholder="Age" value="31" min="1" max="120" required>
+        <small class="error" id="ageError"></small>
+
+        <!-- Country input -->
+        <label for="country">Country: *</label>
+        <input type="text" id="country" name="country" placeholder="Enter your country" required>
+        <small class="error" id="countryError"></small>
+
+        <!-- Phone number inputs (country code and number) -->
+        <label>Phone:</label>
+        <div class="phone-container">
+            <input type="text" id="countryCode" name="countryCode" value="+" maxlength="4" style="width: 60px; text-align: center;" required>
+            <input type="text" id="phoneNumber" name="phoneNumber" maxlength="15" placeholder="1234567890" style="width: 150px;" required>
+        </div>
+        <small class="error" id="countryCodeError"></small>
+        <small class="error" id="phoneNumberError"></small>
+
+        <!-- Optional sock color picker -->
+        <label for="color">Current Sock Color:</label>
+        <input type="color" id="color" name="color">
+        <small class="error" id="colorError"></small>
+
+        <!-- How do you feel radio buttons -->
+        <label>How do you feel?</label>
+        <div class="radio-group">
+            <label class="inline-label">
+                <input type="radio" name="mood" value="happy"> Happy
+            </label>
+            <label class="inline-label">
+                <input type="radio" name="mood" value="mysterious"> Mysterious
+            </label>
+        </div>
+        <small class="error" id="moodError"></small>
+
+        <!-- Secretiveness slider -->
+        <label for="range">How Secretive Are You? (1-10):</label>
+        <input type="range" id="range" name="range" min="1" max="10">
+        <small class="error" id="rangeError"></small>
+
+        <!-- Checkbox for "Reveal Secrets" and conditional file upload -->
+        <label class="inline-label">
+            <input type="checkbox" id="secrets" name="secrets" onchange="toggleSecrets()"> Reveal secrets
+        </label>
+        <small class="error" id="secretsError"></small>
+        
+        <label for="file" id="fileLabel">Upload secrets:</label>
+        <input type="file" id="file" name="file">
+        <small class="error" id="fileError"></small>        
+
+        <!-- Terms and conditions -->
+        <label class="inline-label">
+            <input type="checkbox" id="terms" name="terms" required> Agree to our secret terms and conditions.
+        </label>
+        <small class="error" id="termsError"></small>
+
+        <!-- Submit button -->
+        <button type="submit">Submit</button>
+        <p id="formFeedback" class="success"></p>
+    </form>
+
+    <!-- JavaScript includes -->
+    <script src="countries.js"></script> <!-- Contains country and code data -->
+    <script src="validation.js"></script> <!-- Handles validation logic -->
+    <script src="testing.js"></script> <!-- Contains automated tests -->
+</body>
+</html>
